@@ -125,9 +125,13 @@ export function normalizeRow(row: AnyRecord): NormalizedProduct | null {
 
   if (!code && !article) return null;
 
+  // Длина входит в ключ: в выгрузке 1С один и тот же артикул встречается
+  // несколькими строками с разной длиной — они не должны склеиваться.
+  const length = asText(pick(row, FIELD_ALIASES.length));
+
   const externalId =
     asText(pick(row, FIELD_ALIASES.external_id)) ||
-    `${nomenclatureType}|${code}|${article}`.toLowerCase();
+    `${nomenclatureType}|${code}|${article}|${length}`.toLowerCase();
 
   return {
     external_id: externalId,
@@ -136,7 +140,7 @@ export function normalizeRow(row: AnyRecord): NormalizedProduct | null {
     article,
     quantity: asNumber(pick(row, FIELD_ALIASES.quantity)),
     // Длина сохраняется как строка — ровно в том виде, как в файле 1С.
-    length: asText(pick(row, FIELD_ALIASES.length)),
+    length,
     unit: unitFor(code),
     image_url: asText(pick(row, FIELD_ALIASES.image_url)) || null,
     category: asText(pick(row, FIELD_ALIASES.category)) || null,
