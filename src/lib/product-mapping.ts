@@ -140,7 +140,7 @@ export function normalizeRow(row: AnyRecord): NormalizedProduct | null {
     article,
     quantity: asNumber(pick(row, FIELD_ALIASES.quantity)),
     // Длина сохраняется как строка — ровно в том виде, как в файле 1С.
-    length: asText(pick(row, FIELD_ALIASES.length)),
+    length,
     unit: unitFor(code),
     image_url: asText(pick(row, FIELD_ALIASES.image_url)) || null,
     category: asText(pick(row, FIELD_ALIASES.category)) || null,
