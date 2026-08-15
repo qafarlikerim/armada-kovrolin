@@ -8,16 +8,16 @@ import { importProducts } from "@/lib/catalog.functions";
 export const Route = createFileRoute("/import")({
   head: () => ({
     meta: [
-      { title: "Импорт выгрузки 1С — АРМАДА" },
+      { title: "1C importu — Armada" },
       {
         name: "description",
         content:
-          "Загрузка JSON-выгрузки из 1С для обновления каталога и складских остатков компании «Армада».",
+          "Armada kataloqunu və anbar qalıqlarını yeniləmək üçün 1C JSON faylının yüklənməsi.",
       },
-      { property: "og:title", content: "Импорт выгрузки 1С — АРМАДА" },
+      { property: "og:title", content: "1C importu — Armada" },
       {
         property: "og:description",
-        content: "Обновление каталога «Армада» из JSON-файла 1С.",
+        content: "Armada kataloqunun 1C JSON faylından yenilənməsi.",
       },
     ],
   }),
@@ -43,7 +43,7 @@ function ImportPage() {
     setError(null);
     setResult(null);
     if (!file) {
-      setError("Выберите JSON-файл выгрузки из 1С");
+      setError("1C-dən JSON faylını seçin");
       return;
     }
     setStatus("loading");
@@ -57,10 +57,10 @@ function ImportPage() {
     } catch (caught) {
       setError(
         caught instanceof SyntaxError
-          ? "Файл не является корректным JSON"
+          ? "Fayl düzgün JSON deyil"
           : caught instanceof Error
             ? caught.message
-            : "Не удалось выполнить импорт",
+            : "Import yerinə yetirilmədi",
       );
     } finally {
       setStatus("idle");
@@ -72,21 +72,22 @@ function ImportPage() {
       <header className="border-b border-border/70">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-4 sm:px-6">
           <Link to="/" className="text-xl font-semibold tracking-[0.35em] text-foreground">
-            АРМАДА
+            Armada
           </Link>
           <Link to="/" className="text-sm text-muted-foreground hover:text-primary">
-            ← В каталог
+            ← Kataloqa
           </Link>
         </div>
       </header>
 
       <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-          Импорт выгрузки из 1С
+          1C-dən import
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Данные каталога обновляются только этим импортом и не редактируются вручную.
-          Позже загрузку файла можно заменить автоматической синхронизацией с 1С.
+          Kataloq məlumatları yalnız bu import vasitəsilə yenilənir və əl ilə redaktə
+          edilmir. Sonradan fayl yükləməsi 1C ilə avtomatik sinxronizasiya ilə əvəz oluna
+          bilər.
         </p>
 
         <form
@@ -95,7 +96,7 @@ function ImportPage() {
         >
           <div>
             <label htmlFor="token" className="text-sm font-medium text-foreground">
-              Код доступа
+              Giriş kodu
             </label>
             <input
               id="token"
@@ -103,14 +104,14 @@ function ImportPage() {
               value={token}
               onChange={(event) => setToken(event.target.value)}
               className="mt-2 h-11 w-full rounded-xl border border-border bg-background px-3 text-sm outline-none focus:border-primary focus:ring-4 focus:ring-ring/20"
-              placeholder="Код импорта"
+              placeholder="Import kodu"
               autoComplete="off"
             />
           </div>
 
           <div>
             <label htmlFor="file" className="text-sm font-medium text-foreground">
-              JSON-файл из 1С
+              1C-dən JSON faylı
             </label>
             <input
               id="file"
@@ -128,7 +129,7 @@ function ImportPage() {
               onChange={(event) => setReplaceMissing(event.target.checked)}
               className="mt-0.5 size-4 accent-[var(--primary)]"
             />
-            Удалять позиции, отсутствующие в новом файле (полная замена каталога)
+            Yeni faylda olmayan mövqeləri sil (kataloqun tam əvəzlənməsi)
           </label>
 
           <button
@@ -136,7 +137,7 @@ function ImportPage() {
             disabled={status === "loading"}
             className="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
           >
-            {status === "loading" ? "Импортируем…" : "Загрузить и обновить каталог"}
+            {status === "loading" ? "Yüklənir…" : "JSON yüklə və kataloqu yenilə"}
           </button>
 
           {error ? (
@@ -147,31 +148,32 @@ function ImportPage() {
 
           {result ? (
             <div className="rounded-xl bg-secondary p-4 text-sm text-secondary-foreground">
-              Импорт завершён: строк в файле — {result.total}, обновлено — {result.upserted},
-              удалено — {result.removed}.{" "}
+              Import tamamlandı: fayldakı sətir — {result.total}, yeniləndi —{" "}
+              {result.upserted}, silindi — {result.removed}.{" "}
               <Link to="/" className="underline">
-                Открыть каталог
+                Kataloqu aç
               </Link>
             </div>
           ) : null}
         </form>
 
         <section className="mt-8 rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground">
-          <h2 className="text-sm font-semibold text-foreground">Формат файла</h2>
+          <h2 className="text-sm font-semibold text-foreground">Fayl formatı</h2>
           <p className="mt-2">
-            Поддерживается массив объектов или объект с массивом в поле{" "}
-            <code>items</code>/<code>data</code>/<code>Товары</code>. Распознаются поля:
-            вид номенклатуры, название/код, артикул, количество, длина. Длина сохраняется
-            ровно в том виде, в котором она пришла из 1С.
+            Obyektlər massivi və ya <code>items</code>/<code>data</code> sahəsində massiv
+            olan obyekt dəstəklənir. Tanınan sahələr: <code>type</code>, <code>name</code>,{" "}
+            <code>article</code>, <code>quantity</code>, <code>area</code>. Artikül mətn kimi
+            saxlanılır (öndəki sıfırlar itmir), <code>area</code> dəyəri isə 1C-dən gəldiyi
+            kimi göstərilir.
           </p>
           <pre className="mt-3 overflow-x-auto rounded-xl bg-secondary p-4 text-xs text-secondary-foreground">
             {`[
   {
-    "Вид номенклатуры": "Hammer",
-    "Название/код": "110",
-    "Артикул": "123 Daliot",
-    "Количество": 15,
-    "Длина": "35"
+    "type": "Quality Hummer(Platinum)",
+    "name": "70-1",
+    "article": "0637",
+    "quantity": 15,
+    "area": "35"
   }
 ]`}
           </pre>
