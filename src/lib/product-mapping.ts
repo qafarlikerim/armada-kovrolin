@@ -125,9 +125,13 @@ export function normalizeRow(row: AnyRecord): NormalizedProduct | null {
 
   if (!code && !article) return null;
 
+  // Длина входит в ключ: в выгрузке 1С один и тот же артикул встречается
+  // несколькими строками с разной длиной — они не должны склеиваться.
+  const length = asText(pick(row, FIELD_ALIASES.length));
+
   const externalId =
     asText(pick(row, FIELD_ALIASES.external_id)) ||
-    `${nomenclatureType}|${code}|${article}`.toLowerCase();
+    `${nomenclatureType}|${code}|${article}|${length}`.toLowerCase();
 
   return {
     external_id: externalId,
