@@ -36,19 +36,19 @@ export const listProducts = createServerFn({ method: "GET" }).handler(
 /** Импорт выгрузки 1С. Доступен только с токеном импорта. */
 export const importProducts = createServerFn({ method: "POST" })
   .inputValidator((input: { token: string; payload: unknown; replaceMissing?: boolean }) => {
-    if (!input || typeof input.token !== "string") throw new Error("Некорректный запрос");
+    if (!input || typeof input.token !== "string") throw new Error("Yanlış sorğu");
     return input;
   })
   .handler(async ({ data }) => {
     const expected = process.env["ARMADA_IMPORT_TOKEN"];
     if (!expected || data.token !== expected) {
-      throw new Error("Неверный код доступа к импорту");
+      throw new Error("Import üçün giriş kodu yanlışdır");
     }
 
     const { normalizePayload } = await import("./product-mapping");
     const rows = normalizePayload(data.payload);
     if (rows.length === 0) {
-      throw new Error("В файле не найдено ни одной корректной строки товара");
+      throw new Error("Faylda düzgün məhsul sətri tapılmadı");
     }
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
