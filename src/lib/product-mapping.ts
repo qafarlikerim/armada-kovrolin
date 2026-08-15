@@ -60,7 +60,7 @@ const FIELD_ALIASES = {
     "amount",
     "balance",
   ],
-  length: ["длина", "length", "len", "метраж"],
+  length: ["длина", "length", "len", "метраж", "area", "площадь"],
   unit: ["единица", "единицаизмерения", "unit", "uom"],
   external_id: ["id", "guid", "ref", "ссылка", "уникальныйидентификатор", "external_id"],
   image_url: ["image", "image_url", "фото", "картинка"],
@@ -137,7 +137,7 @@ export function normalizeRow(row: AnyRecord): NormalizedProduct | null {
     quantity: asNumber(pick(row, FIELD_ALIASES.quantity)),
     // Длина сохраняется как строка — ровно в том виде, как в файле 1С.
     length: asText(pick(row, FIELD_ALIASES.length)),
-    unit: asText(pick(row, FIELD_ALIASES.unit)) || "шт.",
+    unit: unitFor(code),
     image_url: asText(pick(row, FIELD_ALIASES.image_url)) || null,
     category: asText(pick(row, FIELD_ALIASES.category)) || null,
     raw: row,
@@ -157,6 +157,11 @@ export function normalizePayload(payload: unknown): NormalizedProduct[] {
   return result;
 }
 
+/** «Keçə» учитывается в метрах, все остальные позиции — в штуках. */
+export function unitFor(code: string): string {
+  return normalizeKey(code) === normalizeKey("Keçə") ? "metr" : "ədəd";
+}
+
 export function matchesQuery(product: CatalogProduct, query: string): boolean {
   const q = query.trim().toLowerCase();
   if (!q) return true;
@@ -172,7 +177,7 @@ export function formatStock(product: CatalogProduct): string {
     const value = Number.isInteger(product.quantity)
       ? String(product.quantity)
       : String(product.quantity).replace(".", ",");
-    return `${value} ${product.unit || "шт."}`;
+    return `${value} ${unitFor(product.code)}`;
   }
-  return "Нет в наличии";
+  return "Stokda yoxdur";
 }
