@@ -14,7 +14,96 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      import_runs: {
+        Row: {
+          created_at: string
+          id: string
+          message: string | null
+          removed_rows: number
+          source: string
+          status: string
+          total_rows: number
+          upserted_rows: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          removed_rows?: number
+          source?: string
+          status?: string
+          total_rows?: number
+          upserted_rows?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          removed_rows?: number
+          source?: string
+          status?: string
+          total_rows?: number
+          upserted_rows?: number
+        }
+        Relationships: []
+      }
+      products: {
+        Row: {
+          article: string
+          category: string | null
+          code: string
+          created_at: string
+          description: string | null
+          external_id: string
+          id: string
+          image_url: string | null
+          length: string
+          nomenclature_type: string
+          quantity: number
+          raw: Json
+          source: string
+          synced_at: string
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          article?: string
+          category?: string | null
+          code?: string
+          created_at?: string
+          description?: string | null
+          external_id: string
+          id?: string
+          image_url?: string | null
+          length?: string
+          nomenclature_type?: string
+          quantity?: number
+          raw?: Json
+          source?: string
+          synced_at?: string
+          unit?: string
+          updated_at?: string
+        }
+        Update: {
+          article?: string
+          category?: string | null
+          code?: string
+          created_at?: string
+          description?: string | null
+          external_id?: string
+          id?: string
+          image_url?: string | null
+          length?: string
+          nomenclature_type?: string
+          quantity?: number
+          raw?: Json
+          source?: string
+          synced_at?: string
+          unit?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
