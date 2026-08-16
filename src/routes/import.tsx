@@ -49,7 +49,12 @@ function ImportPage() {
     setStatus("loading");
     try {
       const text = await file.text();
-      const payload = JSON.parse(text);
+      // 1С иногда выгружает числа с разделителем разрядов («3 000»),
+      // из-за чего JSON становится невалидным — убираем пробел внутри чисел.
+      const sanitized = text
+        .replace(/^\uFEFF/, "")
+        .replace(/(\d)[\s\u00a0](?=\d)/g, "$1");
+      const payload = JSON.parse(sanitized);
       const response = await runImport({ data: { token, payload, replaceMissing } });
       setResult(response);
       await queryClient.invalidateQueries({ queryKey: ["products"] });
