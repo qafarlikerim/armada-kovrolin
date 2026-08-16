@@ -120,7 +120,7 @@ function CatalogPage() {
                   <tr>
                     <th className="px-5 py-3 font-medium">Növ</th>
                     <th className="px-5 py-3 font-medium">Kod</th>
-                    <th className="px-5 py-3 font-medium">Artikül</th>
+                    <th className="px-5 py-3 font-medium">Dalyot</th>
                     <th className="px-5 py-3 font-medium">Uzunluq</th>
                     <th className="px-5 py-3 text-right font-medium">Miqdar</th>
                   </tr>
@@ -170,7 +170,7 @@ function ProductCard({ product }: { product: CatalogProduct }) {
       </div>
       <dl className="mt-3 grid grid-cols-2 gap-2 text-sm">
         <div>
-          <dt className="text-xs text-muted-foreground">Artikül</dt>
+          <dt className="text-xs text-muted-foreground">Dalyot</dt>
           <dd className="text-foreground">{product.article || "—"}</dd>
         </div>
         <div>

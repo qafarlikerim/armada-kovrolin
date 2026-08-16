@@ -167,7 +167,7 @@ function ImportPage() {
           <p className="mt-2">
             Obyektlər massivi və ya <code>items</code>/<code>data</code> sahəsində massiv
             olan obyekt dəstəklənir. Tanınan sahələr: <code>type</code>, <code>name</code>,{" "}
-            <code>article</code>, <code>quantity</code>, <code>area</code>. Artikül mətn kimi
+            <code>article</code>, <code>quantity</code>, <code>area</code>. Dalyot mətn kimi
             saxlanılır (öndəki sıfırlar itmir), <code>area</code> dəyəri isə 1C-dən gəldiyi
             kimi göstərilir.
           </p>
