@@ -77,16 +77,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Armada — xalça və xalı" },
+      { title: "Armada" },
       {
         name: "description",
-        content: "Armada şirkətinin xalça və xalı kataloqu, anbar qalıqları ilə.",
+        content: "Armada şirkətinin məhsul kataloqu, anbar qalıqları ilə.",
       },
       { name: "author", content: "Armada" },
-      { property: "og:title", content: "Armada — xalça və xalı" },
+      { property: "og:title", content: "Armada" },
       {
         property: "og:description",
-        content: "Armada şirkətinin xalça və xalı kataloqu, anbar qalıqları ilə.",
+        content: "Armada şirkətinin məhsul kataloqu, anbar qalıqları ilə.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
