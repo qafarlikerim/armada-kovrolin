@@ -181,7 +181,7 @@ export function formatStock(product: CatalogProduct): string {
     const value = Number.isInteger(product.quantity)
       ? String(product.quantity)
       : String(product.quantity).replace(".", ",");
-    return `${value} ${unitFor(product.code)}`;
+    return `Stokda var · ${value} ${unitFor(product.code)}`;
   }
   return "Stokda yoxdur";
 }
