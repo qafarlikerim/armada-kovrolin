@@ -6,7 +6,7 @@ import { useMemo, useState } from "react";
 import { listProducts } from "@/lib/catalog.functions";
 import { formatStock, matchesQuery, type CatalogProduct } from "@/lib/product-mapping";
 
-const productsQueryOptions = queryOptions({
+export const productsQueryOptions = queryOptions({
   queryKey: ["products"],
   queryFn: () => listProducts(),
   staleTime: 60_000,
@@ -15,13 +15,12 @@ const productsQueryOptions = queryOptions({
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Armada — xalça və xalı kataloqu" },
+      { title: "Armada" },
       {
         name: "description",
-        content:
-          "Armada şirkətinin xalça və xalı kataloqu: anbar qalıqları, kod, artikül və növ üzrə sürətli axtarış.",
+        content: "Armada şirkətinin məhsul kataloqu: anbar qalıqları və sürətli axtarış.",
       },
-      { property: "og:title", content: "Armada — xalça və xalı kataloqu" },
+      { property: "og:title", content: "Armada" },
       {
         property: "og:description",
         content: "Armada kataloqunda anbar qalıqları və sürətli axtarış.",
@@ -56,9 +55,6 @@ function CatalogPage() {
             <span className="text-xl font-semibold tracking-[0.35em] text-foreground sm:text-2xl">
               Armada
             </span>
-            <span className="hidden text-xs uppercase tracking-widest text-muted-foreground sm:inline">
-              xalça və xalı
-            </span>
           </Link>
           <Link
             to="/import"
@@ -74,10 +70,6 @@ function CatalogPage() {
           <h1 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
             Məhsul kataloqu
           </h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Ad/kod, artikül və növ üzrə axtarış. Qalıqlar 1C-dən son yüklənmiş məlumatlara
-            əsaslanır.
-          </p>
 
           <div className="relative mt-6">
             <Search className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
