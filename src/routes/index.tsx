@@ -1,7 +1,7 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Search } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { listProducts } from "@/lib/catalog.functions";
 import { formatStock, matchesQuery, type CatalogProduct } from "@/lib/product-mapping";
@@ -38,14 +38,6 @@ export const Route = createFileRoute("/")({
   component: CatalogPage,
 });
 
-function SyncedAt({ value }: { value: string }) {
-  const [text, setText] = useState<string | null>(null);
-  useEffect(() => {
-    setText(new Date(value).toLocaleString("az-AZ"));
-  }, [value]);
-  if (!text) return null;
-  return <span>Yeniləndi: {text}</span>;
-}
 
 function CatalogPage() {
   const { data } = useSuspenseQuery(productsQueryOptions);
@@ -123,11 +115,6 @@ function CatalogPage() {
             <span className="rounded-full border border-border/70 bg-card/50 px-3 py-1">
               Ümumi mövqe: <span className="text-gold">{data.products.length}</span>
             </span>
-            {data.syncedAt ? (
-              <span className="rounded-full border border-border/70 bg-card/50 px-3 py-1">
-                <SyncedAt value={data.syncedAt} />
-              </span>
-            ) : null}
           </div>
         </section>
 
@@ -219,7 +206,7 @@ function ProductCard({ product }: { product: CatalogProduct }) {
           <p className="text-[10px] uppercase tracking-[0.24em] text-gold/80">
             {product.nomenclature_type || "—"}
           </p>
-          <p className="mt-1.5 font-display text-2xl font-semibold text-foreground">
+          <p className="mt-1.5 font-sans text-xl font-semibold text-foreground">
             {product.code || "—"}
           </p>
         </div>
