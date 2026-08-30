@@ -1,7 +1,7 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Search } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { listProducts } from "@/lib/catalog.functions";
 import { formatStock, matchesQuery, type CatalogProduct } from "@/lib/product-mapping";
@@ -206,7 +206,7 @@ function ProductCard({ product }: { product: CatalogProduct }) {
           <p className="text-[10px] uppercase tracking-[0.24em] text-gold/80">
             {product.nomenclature_type || "—"}
           </p>
-          <p className="mt-1.5 font-display text-2xl font-semibold text-foreground">
+          <p className="mt-1.5 font-sans text-xl font-semibold text-foreground">
             {product.code || "—"}
           </p>
         </div>
