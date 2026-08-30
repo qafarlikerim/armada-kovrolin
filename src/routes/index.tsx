@@ -38,14 +38,6 @@ export const Route = createFileRoute("/")({
   component: CatalogPage,
 });
 
-function SyncedAt({ value }: { value: string }) {
-  const [text, setText] = useState<string | null>(null);
-  useEffect(() => {
-    setText(new Date(value).toLocaleString("az-AZ"));
-  }, [value]);
-  if (!text) return null;
-  return <span>Yeniləndi: {text}</span>;
-}
 
 function CatalogPage() {
   const { data } = useSuspenseQuery(productsQueryOptions);
