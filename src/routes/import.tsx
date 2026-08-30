@@ -74,22 +74,26 @@ function ImportPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b border-border/70">
-        <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-4 sm:px-6">
-          <Link to="/" className="text-xl font-semibold tracking-[0.35em] text-foreground">
+      <header className="border-b border-border/60 bg-background/80 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-5 sm:px-6">
+          <Link
+            to="/"
+            className="font-display text-2xl font-semibold uppercase tracking-[0.42em] text-gradient-gold"
+          >
             Armada
           </Link>
-          <Link to="/" className="text-sm text-muted-foreground hover:text-primary">
+          <Link to="/" className="text-sm text-muted-foreground hover:text-gold">
             ← Kataloqa
           </Link>
         </div>
+        <div className="gold-rule opacity-70" />
       </header>
 
-      <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-        <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-          1C-dən import
+      <main className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+        <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+          1C-dən <span className="text-gradient-gold">import</span>
         </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <p className="mt-3 text-sm text-muted-foreground">
           Kataloq məlumatları yalnız bu import vasitəsilə yenilənir və əl ilə redaktə
           edilmir. Sonradan fayl yükləməsi 1C ilə avtomatik sinxronizasiya ilə əvəz oluna
           bilər.
@@ -97,8 +101,9 @@ function ImportPage() {
 
         <form
           onSubmit={onSubmit}
-          className="mt-8 space-y-5 rounded-2xl border border-border bg-card p-6 shadow-sm"
+          className="surface-panel mt-8 space-y-5 rounded-3xl border border-gold/25 p-6 sm:p-8"
         >
+
           <div>
             <label htmlFor="token" className="text-sm font-medium text-foreground">
               Giriş kodu
