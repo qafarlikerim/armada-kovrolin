@@ -115,11 +115,6 @@ function CatalogPage() {
             <span className="rounded-full border border-border/70 bg-card/50 px-3 py-1">
               Ümumi mövqe: <span className="text-gold">{data.products.length}</span>
             </span>
-            {data.syncedAt ? (
-              <span className="rounded-full border border-border/70 bg-card/50 px-3 py-1">
-                <SyncedAt value={data.syncedAt} />
-              </span>
-            ) : null}
           </div>
         </section>
 
