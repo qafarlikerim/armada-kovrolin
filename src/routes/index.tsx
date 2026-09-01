@@ -125,62 +125,12 @@ function CatalogPage() {
           />
         ) : results.length === 0 ? (
           <EmptyState title="Heç nə tapılmadı" text="Sorğunu dəyişməyə cəhd edin." />
+        ) : query.trim() ? (
+          <ProductList products={results} />
         ) : (
-          <>
-            <ul className="grid gap-3 sm:hidden">
-              {results.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </ul>
-            <div className="surface-panel hidden overflow-hidden rounded-3xl border border-gold/25 sm:block">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-gold/25 bg-[color-mix(in_oklab,var(--gold)_7%,transparent)] text-left">
-                    <th className="px-6 py-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-gold">
-                      Növ
-                    </th>
-                    <th className="px-6 py-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-gold">
-                      Kod
-                    </th>
-                    <th className="px-6 py-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-gold">
-                      Dalyot
-                    </th>
-                    <th className="px-6 py-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-gold">
-                      Uzunluq
-                    </th>
-                    <th className="px-6 py-4 text-right text-[11px] font-semibold uppercase tracking-[0.18em] text-gold">
-                      Miqdar
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {results.map((product) => (
-                    <tr
-                      key={product.id}
-                      className="border-t border-border/40 transition-colors hover:bg-[color-mix(in_oklab,var(--gold)_6%,transparent)]"
-                    >
-                      <td className="px-6 py-4 text-muted-foreground">
-                        {product.nomenclature_type || "—"}
-                      </td>
-                      <td className="px-6 py-4 font-medium text-foreground">
-                        {product.code || "—"}
-                      </td>
-                      <td className="px-6 py-4 tabular-nums text-foreground">
-                        {product.article || "—"}
-                      </td>
-                      <td className="px-6 py-4 tabular-nums text-foreground">
-                        {product.length || "—"}
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        <StockBadge product={product} />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </>
+          <GroupedCatalog products={results} />
         )}
+
       </main>
 
       <footer className="relative border-t border-border/60 py-8">
