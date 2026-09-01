@@ -208,11 +208,24 @@ function formatNumber(value: number): string {
 }
 
 type CodeGroup = { code: string; items: CatalogProduct[]; totalLength: number };
-type TypeGroup = { type: string; codes: CodeGroup[]; count: number };
+type TypeGroup = { type: string; codes: CodeGroup[]; count: number; totalLength: number };
 
-function buildGroups(products: CatalogProduct[]): TypeGroup[] {
+function isKece(product: CatalogProduct): boolean {
+  return product.code.trim().toLowerCase() === "keçə";
+}
+
+function buildGroups(products: CatalogProduct[]): {
+  groups: TypeGroup[];
+  kece: CatalogProduct[];
+} {
   const byType = new Map<string, Map<string, CatalogProduct[]>>();
+  const kece: CatalogProduct[] = [];
   for (const product of products) {
+    // Keçə не входит ни в одну группу — показывается отдельным разделом внизу.
+    if (isKece(product)) {
+      kece.push(product);
+      continue;
+    }
     const type = product.nomenclature_type || "—";
     const code = product.code || "—";
     if (!byType.has(type)) byType.set(type, new Map());
@@ -220,17 +233,22 @@ function buildGroups(products: CatalogProduct[]): TypeGroup[] {
     if (!codes.has(code)) codes.set(code, []);
     codes.get(code)!.push(product);
   }
-  return [...byType.entries()].map(([type, codes]) => ({
-    type,
-    count: [...codes.values()].reduce((sum, items) => sum + items.length, 0),
-    codes: [...codes.entries()]
+  const groups = [...byType.entries()].map(([type, codes]) => {
+    const codeGroups = [...codes.entries()]
       .map(([code, items]) => ({
         code,
         items,
         totalLength: items.reduce((sum, item) => sum + parseLength(item.length), 0),
       }))
-      .sort((a, b) => a.code.localeCompare(b.code, "az", { numeric: true })),
-  }));
+      .sort((a, b) => a.code.localeCompare(b.code, "az", { numeric: true }));
+    return {
+      type,
+      count: codeGroups.reduce((sum, g) => sum + g.items.length, 0),
+      totalLength: codeGroups.reduce((sum, g) => sum + g.totalLength, 0),
+      codes: codeGroups,
+    };
+  });
+  return { groups, kece };
 }
 
 /** Свёрнутый каталог: вид номенклатуры → код → отдельные позиции. */
