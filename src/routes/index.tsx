@@ -1,6 +1,6 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Search } from "lucide-react";
+import { ChevronDown, ChevronRight, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { listProducts } from "@/lib/catalog.functions";
@@ -125,62 +125,12 @@ function CatalogPage() {
           />
         ) : results.length === 0 ? (
           <EmptyState title="Heç nə tapılmadı" text="Sorğunu dəyişməyə cəhd edin." />
+        ) : query.trim() ? (
+          <ProductList products={results} />
         ) : (
-          <>
-            <ul className="grid gap-3 sm:hidden">
-              {results.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </ul>
-            <div className="surface-panel hidden overflow-hidden rounded-3xl border border-gold/25 sm:block">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-gold/25 bg-[color-mix(in_oklab,var(--gold)_7%,transparent)] text-left">
-                    <th className="px-6 py-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-gold">
-                      Növ
-                    </th>
-                    <th className="px-6 py-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-gold">
-                      Kod
-                    </th>
-                    <th className="px-6 py-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-gold">
-                      Dalyot
-                    </th>
-                    <th className="px-6 py-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-gold">
-                      Uzunluq
-                    </th>
-                    <th className="px-6 py-4 text-right text-[11px] font-semibold uppercase tracking-[0.18em] text-gold">
-                      Miqdar
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {results.map((product) => (
-                    <tr
-                      key={product.id}
-                      className="border-t border-border/40 transition-colors hover:bg-[color-mix(in_oklab,var(--gold)_6%,transparent)]"
-                    >
-                      <td className="px-6 py-4 text-muted-foreground">
-                        {product.nomenclature_type || "—"}
-                      </td>
-                      <td className="px-6 py-4 font-medium text-foreground">
-                        {product.code || "—"}
-                      </td>
-                      <td className="px-6 py-4 tabular-nums text-foreground">
-                        {product.article || "—"}
-                      </td>
-                      <td className="px-6 py-4 tabular-nums text-foreground">
-                        {product.length || "—"}
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        <StockBadge product={product} />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </>
+          <GroupedCatalog products={results} />
         )}
+
       </main>
 
       <footer className="relative border-t border-border/60 py-8">
@@ -193,6 +143,199 @@ function CatalogPage() {
     </div>
   );
 }
+
+/** Плоский список позиций — используется при активном поиске. */
+function ProductList({ products }: { products: CatalogProduct[] }) {
+  return (
+    <>
+      <ul className="grid gap-3 sm:hidden">
+        {products.map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </ul>
+      <div className="surface-panel hidden overflow-hidden rounded-3xl border border-gold/25 sm:block">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-gold/25 bg-[color-mix(in_oklab,var(--gold)_7%,transparent)] text-left">
+              <th className="px-6 py-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-gold">
+                Növ
+              </th>
+              <th className="px-6 py-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-gold">
+                Kod
+              </th>
+              <th className="px-6 py-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-gold">
+                Dalyot
+              </th>
+              <th className="px-6 py-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-gold">
+                Uzunluq
+              </th>
+              <th className="px-6 py-4 text-right text-[11px] font-semibold uppercase tracking-[0.18em] text-gold">
+                Miqdar
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {products.map((product) => (
+              <tr
+                key={product.id}
+                className="border-t border-border/40 transition-colors hover:bg-[color-mix(in_oklab,var(--gold)_6%,transparent)]"
+              >
+                <td className="px-6 py-4 text-muted-foreground">
+                  {product.nomenclature_type || "—"}
+                </td>
+                <td className="px-6 py-4 font-medium text-foreground">{product.code || "—"}</td>
+                <td className="px-6 py-4 tabular-nums text-foreground">{product.article || "—"}</td>
+                <td className="px-6 py-4 tabular-nums text-foreground">{product.length || "—"}</td>
+                <td className="px-6 py-4 text-right">
+                  <StockBadge product={product} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
+  );
+}
+
+function parseLength(value: string): number {
+  const parsed = Number.parseFloat(String(value).replace(/\s/g, "").replace(",", "."));
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function formatNumber(value: number): string {
+  return Number.isInteger(value) ? String(value) : String(value).replace(".", ",");
+}
+
+type CodeGroup = { code: string; items: CatalogProduct[]; totalLength: number };
+type TypeGroup = { type: string; codes: CodeGroup[]; count: number };
+
+function buildGroups(products: CatalogProduct[]): TypeGroup[] {
+  const byType = new Map<string, Map<string, CatalogProduct[]>>();
+  for (const product of products) {
+    const type = product.nomenclature_type || "—";
+    const code = product.code || "—";
+    if (!byType.has(type)) byType.set(type, new Map());
+    const codes = byType.get(type)!;
+    if (!codes.has(code)) codes.set(code, []);
+    codes.get(code)!.push(product);
+  }
+  return [...byType.entries()].map(([type, codes]) => ({
+    type,
+    count: [...codes.values()].reduce((sum, items) => sum + items.length, 0),
+    codes: [...codes.entries()]
+      .map(([code, items]) => ({
+        code,
+        items,
+        totalLength: items.reduce((sum, item) => sum + parseLength(item.length), 0),
+      }))
+      .sort((a, b) => a.code.localeCompare(b.code, "az", { numeric: true })),
+  }));
+}
+
+/** Свёрнутый каталог: вид номенклатуры → код → отдельные позиции. */
+function GroupedCatalog({ products }: { products: CatalogProduct[] }) {
+  const groups = useMemo(() => buildGroups(products), [products]);
+  const [openTypes, setOpenTypes] = useState<Record<string, boolean>>({});
+  const [openCodes, setOpenCodes] = useState<Record<string, boolean>>({});
+
+  return (
+    <div className="grid gap-4">
+      {groups.map((group) => {
+        const open = openTypes[group.type] ?? false;
+        return (
+          <section
+            key={group.type}
+            className="surface-panel overflow-hidden rounded-3xl border border-gold/25"
+          >
+            <button
+              type="button"
+              aria-expanded={open}
+              onClick={() => setOpenTypes((prev) => ({ ...prev, [group.type]: !open }))}
+              className="flex w-full items-center justify-between gap-4 bg-[color-mix(in_oklab,var(--gold)_7%,transparent)] px-5 py-4 text-left transition-colors hover:bg-[color-mix(in_oklab,var(--gold)_11%,transparent)] sm:px-6"
+            >
+              <span className="font-sans text-base font-semibold text-foreground sm:text-lg">
+                {group.type}
+              </span>
+              <span className="flex items-center gap-3">
+                <span className="rounded-full border border-gold/40 px-3 py-1 text-xs text-gold">
+                  {group.count}
+                </span>
+                <ChevronDown
+                  className={`size-4 text-gold transition-transform ${open ? "rotate-180" : ""}`}
+                />
+              </span>
+            </button>
+
+            {open && (
+              <div className="border-t border-gold/20">
+                <div className="grid grid-cols-[1fr_auto_auto] gap-x-4 px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-gold sm:px-6">
+                  <span>Kod</span>
+                  <span className="text-right">Məhsul sayı</span>
+                  <span className="text-right">Ümumi uzunluq</span>
+                </div>
+                <ul>
+                  {group.codes.map((codeGroup) => {
+                    const key = `${group.type}|${codeGroup.code}`;
+                    const codeOpen = openCodes[key] ?? false;
+                    return (
+                      <li key={key} className="border-t border-border/40">
+                        <button
+                          type="button"
+                          aria-expanded={codeOpen}
+                          onClick={() =>
+                            setOpenCodes((prev) => ({ ...prev, [key]: !codeOpen }))
+                          }
+                          className="grid w-full grid-cols-[1fr_auto_auto] items-center gap-x-4 px-5 py-3.5 text-left text-sm transition-colors hover:bg-[color-mix(in_oklab,var(--gold)_6%,transparent)] sm:px-6"
+                        >
+                          <span className="flex items-center gap-2 font-medium text-foreground">
+                            <ChevronRight
+                              className={`size-3.5 text-gold transition-transform ${codeOpen ? "rotate-90" : ""}`}
+                            />
+                            {codeGroup.code}
+                          </span>
+                          <span className="text-right tabular-nums text-muted-foreground">
+                            {codeGroup.items.length}
+                          </span>
+                          <span className="text-right tabular-nums text-foreground">
+                            {formatNumber(codeGroup.totalLength)} m
+                          </span>
+                        </button>
+
+                        {codeOpen && (
+                          <ul className="bg-[color-mix(in_oklab,var(--gold)_3%,transparent)] px-5 pb-3 sm:px-6">
+                            {codeGroup.items.map((item) => (
+                              <li
+                                key={item.id}
+                                className="flex flex-wrap items-center justify-between gap-2 border-t border-border/30 py-2.5 text-sm"
+                              >
+                                <span className="text-muted-foreground">
+                                  {item.code || "—"}
+                                  {item.article ? ` · ${item.article}` : ""}
+                                </span>
+                                <span className="flex items-center gap-3">
+                                  <span className="tabular-nums text-foreground">
+                                    {item.length || "—"} m
+                                  </span>
+                                  <StockBadge product={item} />
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            )}
+          </section>
+        );
+      })}
+    </div>
+  );
+}
+
 
 function ProductCard({ product }: { product: CatalogProduct }) {
   return (
