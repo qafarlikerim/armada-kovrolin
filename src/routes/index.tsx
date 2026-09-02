@@ -253,7 +253,7 @@ function buildGroups(products: CatalogProduct[]): {
 
 /** Свёрнутый каталог: вид номенклатуры → код → отдельные позиции. */
 function GroupedCatalog({ products }: { products: CatalogProduct[] }) {
-  const groups = useMemo(() => buildGroups(products), [products]);
+  const { groups, kece } = useMemo(() => buildGroups(products), [products]);
   const [openTypes, setOpenTypes] = useState<Record<string, boolean>>({});
   const [openCodes, setOpenCodes] = useState<Record<string, boolean>>({});
 
