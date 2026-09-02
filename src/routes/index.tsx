@@ -276,6 +276,10 @@ function GroupedCatalog({ products }: { products: CatalogProduct[] }) {
                 {group.type}
               </span>
               <span className="flex items-center gap-3">
+                <span className="whitespace-nowrap text-sm tabular-nums text-muted-foreground">
+                  <span className="hidden sm:inline">Ümumi uzunluq: </span>
+                  <span className="text-foreground">{formatNumber(group.totalLength)} m</span>
+                </span>
                 <span className="rounded-full border border-gold/40 px-3 py-1 text-xs text-gold">
                   {group.count}
                 </span>
