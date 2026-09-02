@@ -253,7 +253,7 @@ function buildGroups(products: CatalogProduct[]): {
 
 /** Свёрнутый каталог: вид номенклатуры → код → отдельные позиции. */
 function GroupedCatalog({ products }: { products: CatalogProduct[] }) {
-  const groups = useMemo(() => buildGroups(products), [products]);
+  const { groups, kece } = useMemo(() => buildGroups(products), [products]);
   const [openTypes, setOpenTypes] = useState<Record<string, boolean>>({});
   const [openCodes, setOpenCodes] = useState<Record<string, boolean>>({});
 
@@ -276,6 +276,10 @@ function GroupedCatalog({ products }: { products: CatalogProduct[] }) {
                 {group.type}
               </span>
               <span className="flex items-center gap-3">
+                <span className="whitespace-nowrap text-sm tabular-nums text-muted-foreground">
+                  <span className="hidden sm:inline">Ümumi uzunluq: </span>
+                  <span className="text-foreground">{formatNumber(group.totalLength)} m</span>
+                </span>
                 <span className="rounded-full border border-gold/40 px-3 py-1 text-xs text-gold">
                   {group.count}
                 </span>
@@ -350,6 +354,36 @@ function GroupedCatalog({ products }: { products: CatalogProduct[] }) {
           </section>
         );
       })}
+
+      {kece.length > 0 && (
+        <section className="surface-panel overflow-hidden rounded-3xl border border-gold/25">
+          <div className="flex w-full items-center justify-between gap-4 bg-[color-mix(in_oklab,var(--gold)_7%,transparent)] px-5 py-4 sm:px-6">
+            <span className="font-sans text-base font-semibold text-foreground sm:text-lg">
+              Keçə
+            </span>
+            <span className="rounded-full border border-gold/40 px-3 py-1 text-xs text-gold">
+              {kece.length}
+            </span>
+          </div>
+          <ul className="border-t border-gold/20 px-5 py-2 sm:px-6">
+            {kece.map((item) => (
+              <li
+                key={item.id}
+                className="flex flex-wrap items-center justify-between gap-2 border-t border-border/30 py-2.5 text-sm first:border-t-0"
+              >
+                <span className="text-muted-foreground">
+                  {item.code || "—"}
+                  {item.article ? ` · ${item.article}` : ""}
+                </span>
+                <span className="flex items-center gap-3">
+                  <span className="tabular-nums text-foreground">{item.length || "—"} m</span>
+                  <StockBadge product={item} />
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </div>
   );
 }
