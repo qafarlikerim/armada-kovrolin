@@ -204,7 +204,8 @@ function parseLength(value: string): number {
 }
 
 function formatNumber(value: number): string {
-  return Number.isInteger(value) ? String(value) : String(value).replace(".", ",");
+  const rounded = Math.round(value * 100) / 100;
+  return Number.isInteger(rounded) ? String(rounded) : String(rounded).replace(".", ",");
 }
 
 type CodeGroup = { code: string; items: CatalogProduct[]; totalLength: number };
@@ -238,7 +239,12 @@ function buildGroups(products: CatalogProduct[]): {
       .map(([code, items]) => ({
         code,
         items,
-        totalLength: items.reduce((sum, item) => sum + parseLength(item.length), 0),
+        // Общая длина = Uzunluq × Miqdar, только по позициям с положительным остатком.
+        totalLength: items.reduce(
+          (sum, item) =>
+            item.quantity > 0 ? sum + parseLength(item.length) * item.quantity : sum,
+          0,
+        ),
       }))
       .sort((a, b) => a.code.localeCompare(b.code, "az", { numeric: true }));
     return {
