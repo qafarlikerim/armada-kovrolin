@@ -204,7 +204,8 @@ function parseLength(value: string): number {
 }
 
 function formatNumber(value: number): string {
-  return Number.isInteger(value) ? String(value) : String(value).replace(".", ",");
+  const rounded = Math.round(value * 100) / 100;
+  return Number.isInteger(rounded) ? String(rounded) : String(rounded).replace(".", ",");
 }
 
 type CodeGroup = { code: string; items: CatalogProduct[]; totalLength: number };
