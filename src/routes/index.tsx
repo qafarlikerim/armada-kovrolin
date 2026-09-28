@@ -238,7 +238,12 @@ function buildGroups(products: CatalogProduct[]): {
       .map(([code, items]) => ({
         code,
         items,
-        totalLength: items.reduce((sum, item) => sum + parseLength(item.length), 0),
+        // Общая длина = Uzunluq × Miqdar, только по позициям с положительным остатком.
+        totalLength: items.reduce(
+          (sum, item) =>
+            item.quantity > 0 ? sum + parseLength(item.length) * item.quantity : sum,
+          0,
+        ),
       }))
       .sort((a, b) => a.code.localeCompare(b.code, "az", { numeric: true }));
     return {
