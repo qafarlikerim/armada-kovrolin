@@ -3,7 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ChevronDown, ChevronRight, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 
-import { listProducts } from "@/lib/catalog.functions";
+import { listProducts } from "@/lib/catalog";
 import { formatStock, matchesQuery, type CatalogProduct } from "@/lib/product-mapping";
 
 export const productsQueryOptions = queryOptions({
@@ -38,7 +38,6 @@ export const Route = createFileRoute("/")({
   component: CatalogPage,
 });
 
-
 function CatalogPage() {
   const { data } = useSuspenseQuery(productsQueryOptions);
   const [query, setQuery] = useState("");
@@ -65,12 +64,6 @@ function CatalogPage() {
               Kataloq
             </span>
           </Link>
-          <Link
-            to="/import"
-            className="rounded-full border border-gold/40 bg-card/60 px-4 py-2 text-xs font-medium tracking-wide text-gold transition-all hover:border-gold hover:shadow-[0_0_0_3px_color-mix(in_oklab,var(--gold)_12%,transparent)]"
-          >
-            1C-dən import
-          </Link>
         </div>
         <div className="gold-rule opacity-70" />
       </header>
@@ -80,9 +73,7 @@ function CatalogPage() {
           <div className="mx-auto max-w-3xl text-center">
             <div className="mx-auto mb-5 flex items-center justify-center gap-3">
               <span className="h-px w-10 bg-gold/50 sm:w-16" />
-              <span className="text-[10px] uppercase tracking-[0.4em] text-gold/80">
-                Armada
-              </span>
+              <span className="text-[10px] uppercase tracking-[0.4em] text-gold/80">Armada</span>
               <span className="h-px w-10 bg-gold/50 sm:w-16" />
             </div>
             <h1 className="font-display text-4xl font-semibold tracking-tight text-foreground sm:text-6xl">
@@ -121,7 +112,7 @@ function CatalogPage() {
         {data.products.length === 0 ? (
           <EmptyState
             title="Kataloq hələ boşdur"
-            text="Import səhifəsində 1C-dən JSON faylını yükləyin — məhsullar avtomatik görünəcək."
+            text="Məhsullar görünəndə kataloq burada əks olunacaq."
           />
         ) : results.length === 0 ? (
           <EmptyState title="Heç nə tapılmadı" text="Sorğunu dəyişməyə cəhd edin." />
@@ -130,7 +121,6 @@ function CatalogPage() {
         ) : (
           <GroupedCatalog products={results} />
         )}
-
       </main>
 
       <footer className="relative border-t border-border/60 py-8">
@@ -241,8 +231,7 @@ function buildGroups(products: CatalogProduct[]): {
         items,
         // Общая длина = Uzunluq × Miqdar, только по позициям с положительным остатком.
         totalLength: items.reduce(
-          (sum, item) =>
-            item.quantity > 0 ? sum + parseLength(item.length) * item.quantity : sum,
+          (sum, item) => (item.quantity > 0 ? sum + parseLength(item.length) * item.quantity : sum),
           0,
         ),
       }))
@@ -311,9 +300,7 @@ function GroupedCatalog({ products }: { products: CatalogProduct[] }) {
                         <button
                           type="button"
                           aria-expanded={codeOpen}
-                          onClick={() =>
-                            setOpenCodes((prev) => ({ ...prev, [key]: !codeOpen }))
-                          }
+                          onClick={() => setOpenCodes((prev) => ({ ...prev, [key]: !codeOpen }))}
                           className="grid w-full grid-cols-[1fr_auto_auto] items-center gap-x-4 px-5 py-3.5 text-left text-sm transition-colors hover:bg-[color-mix(in_oklab,var(--gold)_6%,transparent)] sm:px-6"
                         >
                           <span className="flex items-center gap-2 font-medium text-foreground">
@@ -394,7 +381,6 @@ function GroupedCatalog({ products }: { products: CatalogProduct[] }) {
   );
 }
 
-
 function ProductCard({ product }: { product: CatalogProduct }) {
   return (
     <li className="surface-panel relative overflow-hidden rounded-2xl border border-gold/25 p-5">
@@ -415,15 +401,11 @@ function ProductCard({ product }: { product: CatalogProduct }) {
       </div>
       <dl className="mt-4 grid grid-cols-2 gap-3 border-t border-border/50 pt-4 text-sm">
         <div>
-          <dt className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-            Dalyot
-          </dt>
+          <dt className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Dalyot</dt>
           <dd className="mt-1 tabular-nums text-foreground">{product.article || "—"}</dd>
         </div>
         <div>
-          <dt className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-            Uzunluq
-          </dt>
+          <dt className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Uzunluq</dt>
           <dd className="mt-1 tabular-nums text-foreground">{product.length || "—"}</dd>
         </div>
       </dl>

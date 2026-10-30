@@ -1,170 +1,62 @@
-# Armada Carpet Catalog
-
-Создай рабочий современный веб-сайт для компании «Армада», которая занимается продажей ковролина и ковров.
-
-Это НЕ классический интернет-магазин с корзиной, онлайн-оплатой и оформлением заказов. На первом этапе сайт должен работать как публичный каталог товаров компании с актуальной информацией о наличии на складе. Основные пользователи сайта — сотрудники компании, но каталог также должен быть доступен обычным посетителям.
-
-Главная страница
-
-Сделай главную страницу одновременно каталогом товаров. Отдельная страница «Каталог» на данном этапе не нужна.
-
-В верхней части страницы размести аккуратный современный header с названием компании:
-
-«АРМАДА»
-
-Ниже размести большую строку поиска.
-
-Под поиском сразу должен отображаться список всех товаров.
-
-Дизайн сделай современным, минималистичным и профессиональным, но без излишней сложности. Сайт должен хорошо выглядеть как на компьютере, так и на мобильном телефоне.
-
-Поиск
-
-Реализуй быстрый поиск по товарам.
-
-Поиск должен одновременно искать по следующим полям:
-
-Название/код товара.
-
-Артикул.
-
-Вид номенклатуры.
-
-Например, если пользователь вводит код товара, артикул или название вида номенклатуры, соответствующие товары должны отображаться в результатах.
-
-Поиск должен работать без необходимости перезагружать страницу.
-
-Данные товара
-
-Каждый товар должен отображаться в каталоге примерно со следующими данными:
-
-Вид номенклатуры.
-
-Название/код.
-
-Артикул.
-
-Количество на складе.
-
-Длина.
-
-Пример:
-
-Вид номенклатуры: Hammer
-Название/код: 110
-Артикул: 123 Daliot
-Количество: 15 шт.
-Длина: 35
-
-Важно: значение длины НЕ нужно пересчитывать или изменять. Отображай его ровно в том виде, в котором оно приходит из импортируемого JSON-файла.
-
-На первом этапе фотографии товаров НЕ нужны. Предусмотри архитектуру так, чтобы фотографии можно было добавить позже, но сейчас не создавай сложную систему фотографий.
-
-Наличие
-
-Товары с нулевым остатком не должны исчезать из каталога.
-
-Если количество товара больше 0, отображай его количество, например:
-
-«15 шт.»
-
-Если количество равно 0, отображай:
-
-«Нет в наличии»
-
-При этом товар всё равно должен оставаться видимым и доступным для поиска.
-
-Источник данных
-
-Основным источником складских данных является 1С.
-
-Данные из 1С уже выгружаются в JSON-файл. Сайт должен быть подготовлен для импорта этого JSON.
-
-Не нужно сейчас делать прямое подключение к 1С.
-
-Предусмотри возможность загрузить JSON-файл на сайт, после чего данные каталога обновляются на основании этого файла.
-
-Данные, полученные из 1С, не должны вручную редактироваться пользователем на сайте. Если название, артикул, количество или другие данные изменились, они должны обновляться следующим импортом JSON из 1С.
-
-Архитектуру проекта сделай таким образом, чтобы в будущем можно было заменить ручную загрузку JSON на автоматическую синхронизацию с 1С.
-
-Что НЕ нужно делать сейчас
-
-Не добавляй на данном этапе:
-
-корзину;
-
-онлайн-оплату;
-
-оформление заказов;
-
-систему покупки товаров;
-
-сложную регистрацию покупателей;
-
-фотографии товаров;
-
-сложные фильтры;
-
-отзывы;
-
-избранное;
-
-доставку.
-
-Это каталог, а не полноценный интернет-магазин.
-
-Будущая расширяемость
-
-Структуру проекта и базы данных сделай достаточно гибкой, чтобы позже можно было добавить:
-
-фотографии товаров;
-
-фильтры;
-
-категории;
-
-подробные страницы товаров;
-
-описание товаров;
-
-авторизацию сотрудников;
-
-полноценную админ-панель;
-
-автоматическую синхронизацию с 1С.
-
-Но сейчас приоритет — получить простой, быстрый и полностью рабочий каталог.
-
-Важные требования
-
-Не создавай просто статический визуальный макет.
-
-Мне нужен реально работающий сайт с рабочим поиском, отображением товаров и подготовленной структурой данных для импорта JSON.
-
-Используй чистую, понятную и масштабируемую архитектуру проекта.
-
-Сначала создай рабочую первую версию сайта, которую можно запустить и протестировать.
-
-This project was built with [Lovable](https://lovable.dev).
-
-**Live app**: https://armada-kovrolin.lovable.app
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/5e45a6a3-81f5-4d85-b8f8-6f04c340174f).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+# Armada carpet catalog
+
+Static React + Vite catalog published at
+<https://qafarlikerim.github.io/armada-kovrolin/>.
+
+## Update the product catalog
+
+The catalog source is [`public/data/stock.json`](./public/data/stock.json).
+Replace its contents with the latest JSON export from 1C, save the file, and
+commit/push the change to GitHub. GitHub Actions builds and publishes the
+updated catalog. The site reads the file directly; it does not use a database,
+API, import screen, or secrets.
+
+The file can contain a top-level array of product rows, or an object whose
+`items`, `data`, `products`, `rows`, `Товары`, or `Номенклатура` property is
+the product array. For example:
+
+```json
+[
+  {
+    "type": "Quality Hummer(Platinum)",
+    "name": "70-1",
+    "article": "0637",
+    "quantity": 15,
+    "area": "35",
+    "image_url": "/armada-kovrolin/images/70-1.jpg",
+    "description": "Product description"
+  }
+]
+```
+
+The current 1C export has 170 rows with string fields `name`, `article`, and
+`type`, and numeric fields `area` and `quantity`. The catalog maps these to
+product code, article, nomenclature type, length, and stock, respectively.
+The reader tolerates the UTF-8 BOM and 1C's non-breaking thousands separators
+in unquoted numbers without modifying the source file.
+
+Keep the original 1C fields and values. The existing field aliases and product
+identity rules in `src/lib/product-mapping.ts` are used unchanged. Products
+with different articles remain separate even when their names match.
+
+This is a full-file replacement, not a database sync: a product omitted from
+the new JSON will not be available on the site. If you need to keep an older
+product visible as out of stock, include its row in the new JSON with a
+zero quantity.
+
+## Local development and checks
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+npm ci
 npm run dev
+npm run typecheck
+npm run lint
+npm run build
 ```
+
+## GitHub Pages
+
+In repository **Settings → Pages**, select **GitHub Actions** as the source.
+Push to `main` or run **Deploy static site to GitHub Pages** from the Actions
+tab. Vite uses the `/armada-kovrolin/` base path, and client-side hash routing
+supports direct links and page reloads.
