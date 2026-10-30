@@ -201,6 +201,22 @@ function formatNumber(value: number): string {
 type CodeGroup = { code: string; items: CatalogProduct[]; totalLength: number };
 type TypeGroup = { type: string; codes: CodeGroup[]; count: number; totalLength: number };
 
+const GROUP_PRICES: Record<string, string> = {
+  "Quality Hummer(Platinum)": "- 6$",
+  "Quality Senator": "- 20$",
+  "Quality Diplomat": "- 28$",
+  "Quality Alfa (Elf)": "- 7$",
+  "Karo Halı": "- 12$",
+  Keçə: "- 3$",
+  "Quality Rainbow": "- 5$",
+};
+
+function groupHeading(type: string): string {
+  const price = GROUP_PRICES[type];
+  const name = type === "Quality Hummer(Platinum)" ? "Quality Hummer" : type;
+  return price ? `${name} ${price}` : name;
+}
+
 function isKece(product: CatalogProduct): boolean {
   return product.code.trim().toLowerCase() === "keçə";
 }
@@ -268,7 +284,7 @@ function GroupedCatalog({ products }: { products: CatalogProduct[] }) {
               className="flex w-full items-center justify-between gap-4 bg-[color-mix(in_oklab,var(--gold)_7%,transparent)] px-5 py-4 text-left transition-colors hover:bg-[color-mix(in_oklab,var(--gold)_11%,transparent)] sm:px-6"
             >
               <span className="font-sans text-base font-semibold text-foreground sm:text-lg">
-                {group.type}
+                {groupHeading(group.type)}
               </span>
               <span className="flex items-center gap-3">
                 <span className="whitespace-nowrap text-sm tabular-nums text-muted-foreground">
@@ -352,7 +368,7 @@ function GroupedCatalog({ products }: { products: CatalogProduct[] }) {
         <section className="surface-panel overflow-hidden rounded-3xl border border-gold/25">
           <div className="flex w-full items-center justify-between gap-4 bg-[color-mix(in_oklab,var(--gold)_7%,transparent)] px-5 py-4 sm:px-6">
             <span className="font-sans text-base font-semibold text-foreground sm:text-lg">
-              Keçə
+              {groupHeading("Keçə")}
             </span>
             <span className="rounded-full border border-gold/40 px-3 py-1 text-xs text-gold">
               {kece.length}
