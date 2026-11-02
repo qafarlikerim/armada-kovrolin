@@ -202,13 +202,13 @@ type CodeGroup = { code: string; items: CatalogProduct[]; totalLength: number };
 type TypeGroup = { type: string; codes: CodeGroup[]; count: number; totalLength: number };
 
 const GROUP_PRICES: Record<string, string> = {
-  "Quality Hummer(Platinum)": "- 6$",
-  "Quality Senator": "- 20$",
-  "Quality Diplomat": "- 28$",
-  "Quality Alfa (Elf)": "- 7$",
-  "Karo Halı": "- 12$",
-  Keçə: "- 3$",
-  "Quality Rainbow": "- 5$",
+  "Quality Hummer(Platinum)": "- (6)",
+  "Quality Senator": "- (20)",
+  "Quality Diplomat": "- (28)",
+  "Quality Alfa (Elf)": "- (7)",
+  "Karo Halı": "- (12)",
+  Keçə: "- (3)",
+  "Quality Rainbow": "- (5)",
 };
 
 function groupHeading(type: string): string {
